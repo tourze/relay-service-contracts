@@ -2,152 +2,153 @@
 
 namespace Tourze\RelayServiceContracts\Tests;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use ReflectionClass;
-use ReflectionNamedType;
 use ServerNodeBundle\Entity\Node;
 use Tourze\GBT2659\Alpha2Code;
 use Tourze\RelayServiceContracts\LandingServerInterface;
 
-class LandingServerInterfaceTest extends TestCase
+/**
+ * 落地服务器接口测试
+ *
+ * 验证接口约定和方法签名的正确性
+ * @internal
+ */
+#[CoversClass(LandingServerInterface::class)]
+final class LandingServerInterfaceTest extends TestCase
 {
-    public function test_interface_exists(): void
+    /**
+     * 测试接口方法是否存在
+     */
+    public function testInterfaceMethodsExist(): void
     {
-        $this->assertTrue(interface_exists(LandingServerInterface::class));
+        $reflection = new \ReflectionClass(LandingServerInterface::class);
+
+        // 验证接口中所有必需的方法都存在
+        $this->assertTrue($reflection->hasMethod('getServerType'));
+        $this->assertTrue($reflection->hasMethod('getConnectHost'));
+        $this->assertTrue($reflection->hasMethod('getConnectPort'));
+        $this->assertTrue($reflection->hasMethod('getServerConnectParams'));
+        $this->assertTrue($reflection->hasMethod('getLocation'));
+        $this->assertTrue($reflection->hasMethod('getUri'));
+        $this->assertTrue($reflection->hasMethod('getNode'));
     }
 
-    public function test_interface_has_correct_methods(): void
+    /**
+     * 测试方法返回类型
+     */
+    public function testMethodReturnTypes(): void
     {
-        $reflection = new ReflectionClass(LandingServerInterface::class);
-        $methods = $reflection->getMethods();
-        
-        $expectedMethods = [
-            'getServerType',
-            'getConnectHost',
-            'getConnectPort',
-            'getConnectParams',
-            'getLocation',
-            'getURI',
-            'getNode'
-        ];
-        $actualMethods = array_map(fn($method) => $method->getName(), $methods);
-        
-        foreach ($expectedMethods as $expectedMethod) {
-            $this->assertContains($expectedMethod, $actualMethods);
-        }
-        
-        $this->assertCount(7, $methods);
+        $reflection = new \ReflectionClass(LandingServerInterface::class);
+
+        // 测试 getServerType 返回类型
+        $getServerTypeMethod = $reflection->getMethod('getServerType');
+        $serverTypeReturnType = $getServerTypeMethod->getReturnType();
+        $this->assertInstanceOf(\ReflectionNamedType::class, $serverTypeReturnType);
+        $this->assertEquals('string', $serverTypeReturnType->getName());
+        $this->assertFalse($serverTypeReturnType->allowsNull());
+
+        // 测试 getConnectHost 返回类型
+        $getConnectHostMethod = $reflection->getMethod('getConnectHost');
+        $connectHostReturnType = $getConnectHostMethod->getReturnType();
+        $this->assertInstanceOf(\ReflectionNamedType::class, $connectHostReturnType);
+        $this->assertEquals('string', $connectHostReturnType->getName());
+        $this->assertFalse($connectHostReturnType->allowsNull());
+
+        // 测试 getConnectPort 返回类型
+        $getConnectPortMethod = $reflection->getMethod('getConnectPort');
+        $connectPortReturnType = $getConnectPortMethod->getReturnType();
+        $this->assertInstanceOf(\ReflectionNamedType::class, $connectPortReturnType);
+        $this->assertEquals('int', $connectPortReturnType->getName());
+        $this->assertFalse($connectPortReturnType->allowsNull());
+
+        // 测试 getServerConnectParams 返回类型（可空数组）
+        $getServerConnectParamsMethod = $reflection->getMethod('getServerConnectParams');
+        $paramsReturnType = $getServerConnectParamsMethod->getReturnType();
+        $this->assertInstanceOf(\ReflectionNamedType::class, $paramsReturnType);
+        $this->assertEquals('array', $paramsReturnType->getName());
+        $this->assertTrue($paramsReturnType->allowsNull());
+
+        // 测试 getLocation 返回类型（可空）
+        $getLocationMethod = $reflection->getMethod('getLocation');
+        $locationReturnType = $getLocationMethod->getReturnType();
+        $this->assertInstanceOf(\ReflectionNamedType::class, $locationReturnType);
+        $this->assertEquals('Tourze\GBT2659\Alpha2Code', $locationReturnType->getName());
+        $this->assertTrue($locationReturnType->allowsNull());
+
+        // 测试 getUri 返回类型
+        $getUriMethod = $reflection->getMethod('getUri');
+        $uriReturnType = $getUriMethod->getReturnType();
+        $this->assertInstanceOf(\ReflectionNamedType::class, $uriReturnType);
+        $this->assertEquals('string', $uriReturnType->getName());
+        $this->assertFalse($uriReturnType->allowsNull());
+
+        // 测试 getNode 返回类型（可空）
+        $getNodeMethod = $reflection->getMethod('getNode');
+        $nodeReturnType = $getNodeMethod->getReturnType();
+        $this->assertInstanceOf(\ReflectionNamedType::class, $nodeReturnType);
+        $this->assertEquals('ServerNodeBundle\Entity\Node', $nodeReturnType->getName());
+        $this->assertTrue($nodeReturnType->allowsNull());
     }
 
-    public function test_getServerType_method_signature(): void
+    /**
+     * 测试接口是否正确声明
+     */
+    public function testInterfaceDeclaration(): void
     {
-        $reflection = new ReflectionClass(LandingServerInterface::class);
-        $method = $reflection->getMethod('getServerType');
-        
-        $this->assertTrue($method->isPublic());
-        $this->assertFalse($method->isStatic());
-        $this->assertEquals(0, $method->getNumberOfParameters());
-        
-        $returnType = $method->getReturnType();
-        $this->assertNotNull($returnType);
-        $this->assertFalse($returnType->allowsNull());
-        $this->assertInstanceOf(ReflectionNamedType::class, $returnType);
-        $this->assertEquals('string', $returnType->getName());
+        $reflection = new \ReflectionClass(LandingServerInterface::class);
+
+        $this->assertTrue($reflection->isInterface());
+        $this->assertEquals('Tourze\RelayServiceContracts', $reflection->getNamespaceName());
+        $this->assertEquals('LandingServerInterface', $reflection->getShortName());
     }
 
-    public function test_getConnectHost_method_signature(): void
+    /**
+     * 测试接口文档注释
+     */
+    public function testInterfaceDocumentation(): void
     {
-        $reflection = new ReflectionClass(LandingServerInterface::class);
-        $method = $reflection->getMethod('getConnectHost');
-        
-        $this->assertTrue($method->isPublic());
-        $this->assertFalse($method->isStatic());
-        $this->assertEquals(0, $method->getNumberOfParameters());
-        
-        $returnType = $method->getReturnType();
-        $this->assertNotNull($returnType);
-        $this->assertFalse($returnType->allowsNull());
-        $this->assertInstanceOf(ReflectionNamedType::class, $returnType);
-        $this->assertEquals('string', $returnType->getName());
+        $reflection = new \ReflectionClass(LandingServerInterface::class);
+        $docComment = $reflection->getDocComment();
+
+        $this->assertNotFalse($docComment);
+        $this->assertStringContainsString('落地服务器接口', $docComment);
+        $this->assertStringContainsString('定义落地服务器的基本属性和连接信息', $docComment);
     }
 
-    public function test_getConnectPort_method_signature(): void
+    /**
+     * 测试方法参数和返回类型符合约定
+     */
+    public function testMethodSignatures(): void
     {
-        $reflection = new ReflectionClass(LandingServerInterface::class);
-        $method = $reflection->getMethod('getConnectPort');
-        
-        $this->assertTrue($method->isPublic());
-        $this->assertFalse($method->isStatic());
-        $this->assertEquals(0, $method->getNumberOfParameters());
-        
-        $returnType = $method->getReturnType();
-        $this->assertNotNull($returnType);
-        $this->assertFalse($returnType->allowsNull());
-        $this->assertInstanceOf(ReflectionNamedType::class, $returnType);
-        $this->assertEquals('int', $returnType->getName());
-    }
+        $reflection = new \ReflectionClass(LandingServerInterface::class);
 
-    public function test_getConnectParams_method_signature(): void
-    {
-        $reflection = new ReflectionClass(LandingServerInterface::class);
-        $method = $reflection->getMethod('getConnectParams');
-        
-        $this->assertTrue($method->isPublic());
-        $this->assertFalse($method->isStatic());
-        $this->assertEquals(0, $method->getNumberOfParameters());
-        
-        $returnType = $method->getReturnType();
-        $this->assertNotNull($returnType);
-        $this->assertTrue($returnType->allowsNull());
-        $this->assertInstanceOf(ReflectionNamedType::class, $returnType);
-        $this->assertEquals('array', $returnType->getName());
-    }
+        // getServerType 无参数
+        $getServerTypeMethod = $reflection->getMethod('getServerType');
+        $this->assertCount(0, $getServerTypeMethod->getParameters());
 
-    public function test_getLocation_method_signature(): void
-    {
-        $reflection = new ReflectionClass(LandingServerInterface::class);
-        $method = $reflection->getMethod('getLocation');
-        
-        $this->assertTrue($method->isPublic());
-        $this->assertFalse($method->isStatic());
-        $this->assertEquals(0, $method->getNumberOfParameters());
-        
-        $returnType = $method->getReturnType();
-        $this->assertNotNull($returnType);
-        $this->assertTrue($returnType->allowsNull());
-        $this->assertInstanceOf(ReflectionNamedType::class, $returnType);
-        $this->assertEquals(Alpha2Code::class, $returnType->getName());
-    }
+        // getConnectHost 无参数
+        $getConnectHostMethod = $reflection->getMethod('getConnectHost');
+        $this->assertCount(0, $getConnectHostMethod->getParameters());
 
-    public function test_getURI_method_signature(): void
-    {
-        $reflection = new ReflectionClass(LandingServerInterface::class);
-        $method = $reflection->getMethod('getURI');
-        
-        $this->assertTrue($method->isPublic());
-        $this->assertFalse($method->isStatic());
-        $this->assertEquals(0, $method->getNumberOfParameters());
-        
-        $returnType = $method->getReturnType();
-        $this->assertNotNull($returnType);
-        $this->assertFalse($returnType->allowsNull());
-        $this->assertInstanceOf(ReflectionNamedType::class, $returnType);
-        $this->assertEquals('string', $returnType->getName());
-    }
+        // getConnectPort 无参数
+        $getConnectPortMethod = $reflection->getMethod('getConnectPort');
+        $this->assertCount(0, $getConnectPortMethod->getParameters());
 
-    public function test_getNode_method_signature(): void
-    {
-        $reflection = new ReflectionClass(LandingServerInterface::class);
-        $method = $reflection->getMethod('getNode');
-        
-        $this->assertTrue($method->isPublic());
-        $this->assertFalse($method->isStatic());
-        $this->assertEquals(0, $method->getNumberOfParameters());
-        
-        $returnType = $method->getReturnType();
-        $this->assertNotNull($returnType);
-        $this->assertTrue($returnType->allowsNull());
-        $this->assertInstanceOf(ReflectionNamedType::class, $returnType);
-        $this->assertEquals(Node::class, $returnType->getName());
+        // getServerConnectParams 无参数
+        $getServerConnectParamsMethod = $reflection->getMethod('getServerConnectParams');
+        $this->assertCount(0, $getServerConnectParamsMethod->getParameters());
+
+        // getLocation 无参数
+        $getLocationMethod = $reflection->getMethod('getLocation');
+        $this->assertCount(0, $getLocationMethod->getParameters());
+
+        // getUri 无参数
+        $getUriMethod = $reflection->getMethod('getUri');
+        $this->assertCount(0, $getUriMethod->getParameters());
+
+        // getNode 无参数
+        $getNodeMethod = $reflection->getMethod('getNode');
+        $this->assertCount(0, $getNodeMethod->getParameters());
     }
 }
