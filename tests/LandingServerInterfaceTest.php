@@ -7,6 +7,7 @@ use PHPUnit\Framework\TestCase;
 use ServerNodeBundle\Entity\Node;
 use Tourze\GBT2659\Alpha2Code;
 use Tourze\RelayServiceContracts\LandingServerInterface;
+use Tourze\RelayServiceContracts\NodeInterface;
 
 /**
  * 落地服务器接口测试
@@ -87,7 +88,7 @@ final class LandingServerInterfaceTest extends TestCase
         $getNodeMethod = $reflection->getMethod('getNode');
         $nodeReturnType = $getNodeMethod->getReturnType();
         $this->assertInstanceOf(\ReflectionNamedType::class, $nodeReturnType);
-        $this->assertEquals('ServerNodeBundle\Entity\Node', $nodeReturnType->getName());
+        $this->assertEquals(NodeInterface::class, $nodeReturnType->getName());
         $this->assertTrue($nodeReturnType->allowsNull());
     }
 

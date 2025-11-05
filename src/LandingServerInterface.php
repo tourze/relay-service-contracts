@@ -2,7 +2,6 @@
 
 namespace Tourze\RelayServiceContracts;
 
-use ServerNodeBundle\Entity\Node;
 use Tourze\GBT2659\Alpha2Code;
 
 /**
@@ -57,7 +56,7 @@ interface LandingServerInterface
     /**
      * 获取关联的服务器节点信息
      *
-     * @return Node|null 节点实体，无关联时返回null
+     * @return NodeInterface|null 节点实体，无关联时返回null
      */
-    public function getNode(): ?Node;
+    public function getNode(): ?NodeInterface;
 }
