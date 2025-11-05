@@ -5,7 +5,7 @@
   "license": "MIT",
   "require": {
     "symfony/security-core": "^7.3",
-    "tourze/gb-t-2659": "0.0.*",
+    "tourze/gb-t-2659": "1.0.*",
     "tourze/server-node-bundle": "0.0.*"
   },
   "require-dev": {
